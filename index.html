@@ -431,6 +431,7 @@ const ICONS = {
  chat:'<path class="t" d="M20 24h80a10 10 0 0 1 10 10v36a10 10 0 0 1-10 10H54l-22 18V80H20a10 10 0 0 1-10-10V34a10 10 0 0 1 10-10z"/><path d="M34 46h44M34 60h24"/>',
  shirt:'<path class="t" d="M42 16L14 32l10 22 12-6v56h48V48l12 6 10-22-28-16c-4 8-10 12-18 12s-14-4-18-12z"/>',
  shoe:'<path class="t" d="M12 78c0-9 5-13 11-13l14-36 14 10 28 14c14 5 28 8 28 22v7H12z"/><path d="M12 86h96M44 54l8 6M54 60l8 6"/>',
+ apple:'<path class="t" d="M60 36c-14-12-40-6-40 22 0 26 18 48 30 48 6 0 6-3 10-3s4 3 10 3c12 0 30-22 30-48 0-28-26-34-40-22z"/><path d="M60 36c0-10 4-18 12-22"/>',
  basket:'<path class="t" d="M12 48h96l-10 54H22z"/><path d="M34 48l16-30M86 48L70 18M44 64v24M60 64v24M76 64v24"/>',
  box:'<path class="t" d="M60 14l42 23v46l-42 23-42-23V37z"/><path d="M18 37l42 23 42-23M60 60v46"/>'
 };
@@ -482,6 +483,7 @@ const EN = {
 "ডিজিটাল পণ্য দেখুন":"View digital products",
 "ক্লদিং":"Clothing",
 "জুতা":"Shoes",
+"ফল":"Fruits",
 "গ্রোসারি":"Grocery",
 "এই ক্যাটাগরিতে শীঘ্রই পণ্য আসছে।":"Products coming soon in this category.",
 "কাজ হবে অনলাইনে, ফলাফল হাতে।":"Done online, delivered to you.",
@@ -645,7 +647,7 @@ async function copy(text,msg){
   catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(msg||T('কপি হয়েছে'))}catch(_){toast(T('কপি করা যায়নি, হাতে সিলেক্ট করুন'))}ta.remove()}
 }
 const minPrice=p=>p.options&&p.options.length?Math.min(...p.options.map(o=>+o.price)):+p.price;
-const SECS=[['gadget','গ্যাজেট','physical'],['digital_product','ডিজিটাল পণ্য','digital'],['digital_service','ডিজিটাল সার্ভিস','digital'],['clothing','ক্লদিং','physical'],['shoes','জুতা','physical'],['grocery','গ্রোসারি','physical']];
+const SECS=[['gadget','গ্যাজেট','physical'],['digital_product','ডিজিটাল পণ্য','digital'],['digital_service','ডিজিটাল সার্ভিস','digital'],['clothing','ক্লদিং','physical'],['shoes','জুতা','physical'],['fruits','ফল','physical'],['grocery','গ্রোসারি','physical']];
 const secOf=p=>p.section||(p.kind==='digital'?'digital_product':'gadget');
 const kindLabel=k=>k==='digital'?T('ডিজিটাল'):T('ফিজিক্যাল');
 const dt = ts=>new Intl.DateTimeFormat(LANG==='en'?'en-GB':'bn-BD',{dateStyle:'medium',timeStyle:'short'}).format(new Date(ts));

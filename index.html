@@ -429,6 +429,9 @@ const ICONS = {
  thumb:'<rect class="t" x="12" y="26" width="96" height="68" rx="12"/><path d="M22 82l24-24 16 16 12-12 24 22"/><circle cx="84" cy="46" r="6"/>',
  web:'<rect class="t" x="12" y="20" width="96" height="80" rx="12"/><path d="M12 40h96M28 58h30M28 70h22M28 82h36"/><circle cx="26" cy="30" r="2.5"/><circle cx="36" cy="30" r="2.5"/><rect x="70" y="56" width="24" height="28" rx="6"/>',
  chat:'<path class="t" d="M20 24h80a10 10 0 0 1 10 10v36a10 10 0 0 1-10 10H54l-22 18V80H20a10 10 0 0 1-10-10V34a10 10 0 0 1 10-10z"/><path d="M34 46h44M34 60h24"/>',
+ shirt:'<path class="t" d="M42 16L14 32l10 22 12-6v56h48V48l12 6 10-22-28-16c-4 8-10 12-18 12s-14-4-18-12z"/>',
+ shoe:'<path class="t" d="M12 78c0-9 5-13 11-13l14-36 14 10 28 14c14 5 28 8 28 22v7H12z"/><path d="M12 86h96M44 54l8 6M54 60l8 6"/>',
+ basket:'<path class="t" d="M12 48h96l-10 54H22z"/><path d="M34 48l16-30M86 48L70 18M44 64v24M60 64v24M76 64v24"/>',
  box:'<path class="t" d="M60 14l42 23v46l-42 23-42-23V37z"/><path d="M18 37l42 23 42-23M60 60v46"/>'
 };
 const UI = {
@@ -475,6 +478,12 @@ const EN = {
 "গ্যাজেট দেখুন":"Browse gadgets",
 "সব পণ্য":"All products",
 "ডিজিটাল সার্ভিস":"Digital services",
+"ডিজিটাল পণ্য":"Digital products",
+"ডিজিটাল পণ্য দেখুন":"View digital products",
+"ক্লদিং":"Clothing",
+"জুতা":"Shoes",
+"গ্রোসারি":"Grocery",
+"এই ক্যাটাগরিতে শীঘ্রই পণ্য আসছে।":"Products coming soon in this category.",
 "কাজ হবে অনলাইনে, ফলাফল হাতে।":"Done online, delivered to you.",
 "ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।":"Design, websites, consulting and subscription services. Place your order and we will handle the rest.",
 "সার্ভিস দেখুন":"Browse services",
@@ -636,6 +645,8 @@ async function copy(text,msg){
   catch(e){const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(msg||T('কপি হয়েছে'))}catch(_){toast(T('কপি করা যায়নি, হাতে সিলেক্ট করুন'))}ta.remove()}
 }
 const minPrice=p=>p.options&&p.options.length?Math.min(...p.options.map(o=>+o.price)):+p.price;
+const SECS=[['gadget','গ্যাজেট','physical'],['digital_product','ডিজিটাল পণ্য','digital'],['digital_service','ডিজিটাল সার্ভিস','digital'],['clothing','ক্লদিং','physical'],['shoes','জুতা','physical'],['grocery','গ্রোসারি','physical']];
+const secOf=p=>p.section||(p.kind==='digital'?'digital_product':'gadget');
 const kindLabel=k=>k==='digital'?T('ডিজিটাল'):T('ফিজিক্যাল');
 const dt = ts=>new Intl.DateTimeFormat(LANG==='en'?'en-GB':'bn-BD',{dateStyle:'medium',timeStyle:'short'}).format(new Date(ts));
 const digits = s=>String(s||'').replace(/\D/g,'');
@@ -681,11 +692,11 @@ function shipFee(T,area){
 
 /* ---------- home ---------- */
 const slides = ()=>[
- {c:'s1',eye:T('গ্যাজেট'),h:T('আপনার প্রযুক্তি, আরও স্মার্ট।'),p:T('যাচাই করা গ্যাজেট, নির্ভরযোগ্য ডেলিভারি আর সরাসরি সাপোর্ট, সবকিছু এক জায়গায়।'),a:[T('গ্যাজেট দেখুন'),'physical'],b:[T('সব পণ্য'),'all'],
+ {c:'s1',eye:T('গ্যাজেট'),h:T('আপনার প্রযুক্তি, আরও স্মার্ট।'),p:T('যাচাই করা গ্যাজেট, নির্ভরযোগ্য ডেলিভারি আর সরাসরি সাপোর্ট, সবকিছু এক জায়গায়।'),a:[T('গ্যাজেট দেখুন'),'gadget'],b:[T('সব পণ্য'),'all'],
   stage:`<div class="gc g-a" style="--d:1.2"><div class="in">${ic('watch','w')}<b>Smart Watch</b><span>Modex Fit</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic('buds','w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic('power','w')}</div></div>`},
- {c:'s2',eye:T('ডিজিটাল সার্ভিস'),h:T('কাজ হবে অনলাইনে, ফলাফল হাতে।'),p:T('ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।'),a:[T('সার্ভিস দেখুন'),'digital'],b:[T('সব পণ্য'),'all'],
+ {c:'s2',eye:T('ডিজিটাল সার্ভিস'),h:T('কাজ হবে অনলাইনে, ফলাফল হাতে।'),p:T('ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।'),a:[T('ডিজিটাল পণ্য দেখুন'),'digital_product'],b:[T('সব পণ্য'),'all'],
   stage:`<div class="chip c1" style="--d:1"><span>${ic('spark','w')}</span><div><b>${T('সাবস্ক্রিপশন')}</b><small>${T('AI সহকারী সার্ভিস')}</small></div></div><div class="chip c2" style="--d:1.8"><span>${ic('web','w')}</span><div><b>${T('ওয়েবসাইট সেটআপ')}</b><small>${T('মোবাইল-ফ্রেন্ডলি')}</small></div><i>${T('নতুন')}</i></div><div class="chip c3" style="--d:.7"><span>${ic('thumb','w')}</span><div><b>${T('থাম্বনেইল ডিজাইন')}</b><small>${T('ভিডিও অনুযায়ী')}</small></div></div>`},
- {c:'s3',eye:T('নিরাপদ টপ-আপ'),h:T('পাসওয়ার্ড ছাড়াই, নিরাপদে।'),p:T('আমরা কখনো আপনার পাসওয়ার্ড, PIN বা OTP চাই না। বিকাশ বা নগদে পেমেন্ট করুন, বাকিটা আমরা সামলাব।'),a:[T('টপ-আপ দেখুন'),'digital'],b:[T('সব পণ্য'),'all'],
+ {c:'s3',eye:T('নিরাপদ টপ-আপ'),h:T('পাসওয়ার্ড ছাড়াই, নিরাপদে।'),p:T('আমরা কখনো আপনার পাসওয়ার্ড, PIN বা OTP চাই না। বিকাশ বা নগদে পেমেন্ট করুন, বাকিটা আমরা সামলাব।'),a:[T('টপ-আপ দেখুন'),'digital_product'],b:[T('সব পণ্য'),'all'],
   stage:`<div class="coin-wrap"><div class="orbit"></div><div class="coin"><div class="face">${ic('coin')}</div><div class="face bk">${ic('coin')}</div></div></div><div class="lockchip">${ui('lock',16)}${T('পাসওয়ার্ড লাগে না')}</div>`}
 ];
 function heroHTML(){
@@ -699,7 +710,7 @@ function trustHTML(){
 }
 function shopHTML(){
   return `<section class="sec wrap" id="shop"><div class="sec-h"><div><h2>${T('সব পণ্য ও সার্ভিস')}</h2></div></div>
-  <div class="bar"><div class="tabs" role="group" aria-label="${T('ফিল্টার')}">${[['all',T('সব')],['physical',T('গ্যাজেট')],['digital',T('ডিজিটাল সার্ভিস')]].map(x=>`<button data-act="tab" data-k="${x[0]}" aria-pressed="${S.f.kind===x[0]}">${x[1]}</button>`).join('')}</div>
+  <div class="bar"><div class="tabs" role="group" aria-label="${T('ফিল্টার')}">${[['all',T('সব')],...SECS.map(x=>[x[0],T(x[1])])].map(x=>`<button data-act="tab" data-k="${x[0]}" aria-pressed="${S.f.kind===x[0]}">${x[1]}</button>`).join('')}</div>
   <label class="field">${ui('search',18)}<input id="q" type="search" placeholder="${T('খুঁজুন…')}" value="${esc(S.f.q)}" aria-label="${T('খুঁজুন')}" autocomplete="off"></label>
   <select id="sort" aria-label="${T('সাজান')}"><option value="feat">${T('ফিচার্ড আগে')}</option><option value="low">${T('দাম: কম থেকে বেশি')}</option><option value="high">${T('দাম: বেশি থেকে কম')}</option></select></div>
   <div class="grid" id="grid"></div></section>`;
@@ -724,7 +735,7 @@ function renderHome(){
 }
 function visibleItems(){
   let a=S.items.filter(p=>p.active!==false);
-  if(S.f.kind!=='all')a=a.filter(p=>p.kind===S.f.kind);
+  if(S.f.kind!=='all')a=a.filter(p=>secOf(p)===S.f.kind);
   const q=S.f.q.trim().toLowerCase();
   if(q)a=a.filter(p=>(p.title+' '+tp(p,'title')+' '+(tp(p,'short')||'')+' '+(tp(p,'cat')||'')).toLowerCase().includes(q));
   if(S.f.sort==='low')a=[...a].sort((x,y)=>minPrice(x)-minPrice(y));
@@ -744,7 +755,7 @@ function renderGrid(){
   const g=$('#grid');if(!g)return;
   if(S.loading){g.innerHTML=Array.from({length:8},()=>'<div class="card sk"></div>').join('');return}
   const a=visibleItems();
-  g.innerHTML=a.length?a.map(card).join(''):`<div class="empty">${T('কিছু পাওয়া যায়নি। অন্য শব্দে খুঁজে দেখুন।')}</div>`;
+  g.innerHTML=a.length?a.map(card).join(''):`<div class="empty">${S.f.kind!=='all'&&!S.f.q.trim()?T('এই ক্যাটাগরিতে শীঘ্রই পণ্য আসছে।'):T('কিছু পাওয়া যায়নি। অন্য শব্দে খুঁজে দেখুন।')}</div>`;
   $$('.tabs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===S.f.kind)));
 }
 
@@ -991,7 +1002,7 @@ async function saveSettings(form){
   }catch(e){toast('সেভ করা যায়নি')}
 }
 function openEdit(id){
-  const p=id?S.items.find(x=>x.id===id):{kind:'physical',active:true,hue:20,art:'box',options:[],features:[],fields:[],stock:10};
+  const p=id?S.items.find(x=>x.id===id):{kind:'physical',section:'gadget',active:true,hue:20,art:'box',options:[],features:[],fields:[],stock:10};
   if(!p)return;
   S.editId=id||null;S.editImg=p.image||'';
   const v=(k)=>esc(p[k]==null?'':p[k]);
@@ -999,7 +1010,7 @@ function openEdit(id){
   $('#dE').innerHTML=`<div class="dbox"><button class="dx" data-act="close" aria-label="বন্ধ করুন">${ui('x',18)}</button><h2 style="font-size:22px;margin-bottom:16px">${id?'পণ্য এডিট':'নতুন পণ্য'}</h2>
   <form id="pf" class="fs" novalidate>
    <label class="fld"><span>নাম *</span><input name="title" value="${v('title')}" maxlength="120" required></label>
-   <div class="two"><label class="fld"><span>ধরন</span><select name="kind"><option value="physical"${p.kind==='physical'?' selected':''}>ফিজিক্যাল পণ্য</option><option value="digital"${p.kind==='digital'?' selected':''}>ডিজিটাল সার্ভিস</option></select></label><label class="fld"><span>ক্যাটাগরি</span><input name="cat" value="${v('cat')}" maxlength="40"></label>
+   <div class="two"><label class="fld"><span>বিভাগ</span><select name="section">${SECS.map(x=>`<option value="${x[0]}"${secOf(p)===x[0]?' selected':''}>${x[1]}</option>`).join('')}</select></label><label class="fld"><span>ক্যাটাগরি</span><input name="cat" value="${v('cat')}" maxlength="40"></label>
    <label class="fld"><span>দাম (৳) *</span><input name="price" inputmode="numeric" value="${v('price')}"></label><label class="fld"><span>আগের দাম (৳, ঐচ্ছিক)</span><input name="old" inputmode="numeric" value="${+p.old?p.old:''}"></label>
    <label class="fld"><span>স্টক (ফিজিক্যাল)</span><input name="stock" inputmode="numeric" value="${p.stock==null?'':esc(p.stock)}"></label><label class="fld"><span>ব্যাজ (ঐচ্ছিক)</span><input name="badge" value="${v('badge')}" maxlength="20"></label></div>
    <label class="fld"><span>ছোট বিবরণ</span><input name="short" value="${v('short')}" maxlength="140"></label>
@@ -1044,9 +1055,9 @@ async function submitProduct(form){
   let price=num('price');if(options.length)price=options[0].price;
   if(price<=0){err.textContent='সঠিক দাম দিন।';return}
   const fields=String(f.get('fields')||'').split('\n').map(l=>l.trim()).filter(Boolean).slice(0,6).map((l,i)=>{const o=l.endsWith('?');return {k:'f'+i,label:(o?l.slice(0,-1):l).trim(),ph:'',req:!o}});
-  const kind=f.get('kind')==='digital'?'digital':'physical';
+  const section=SECS.some(x=>x[0]===f.get('section'))?f.get('section'):'gadget';const kind=section.startsWith('digital')?'digital':'physical';
   const old=S.items.find(x=>x.id===S.editId)||{};
-  const item={...old,id:S.editId||('p-'+Date.now().toString(36)),title,kind,cat:String(f.get('cat')||'').trim(),price,old:num('old'),stock:kind==='physical'?(String(f.get('stock')||'').trim()===''?null:num('stock')):null,badge:String(f.get('badge')||'').trim(),short:String(f.get('short')||'').trim(),desc:String(f.get('desc')||'').trim(),features:String(f.get('features')||'').split('\n').map(l=>l.trim()).filter(Boolean).slice(0,10),options,fields,note:String(f.get('note')||'').trim(),art:String(f.get('art')||'box'),hue:Math.min(360,num('hue')),image:S.editImg||'',feat:!!f.get('feat'),active:old.active!==false};
+  const item={...old,id:S.editId||('p-'+Date.now().toString(36)),title,kind,section,cat:String(f.get('cat')||'').trim(),price,old:num('old'),stock:kind==='physical'?(String(f.get('stock')||'').trim()===''?null:num('stock')):null,badge:String(f.get('badge')||'').trim(),short:String(f.get('short')||'').trim(),desc:String(f.get('desc')||'').trim(),features:String(f.get('features')||'').split('\n').map(l=>l.trim()).filter(Boolean).slice(0,10),options,fields,note:String(f.get('note')||'').trim(),art:String(f.get('art')||'box'),hue:Math.min(360,num('hue')),image:S.editImg||'',feat:!!f.get('feat'),active:old.active!==false};
   const ln2=k=>String(f.get(k)||'').split('\n').map(l=>l.trim()).filter(Boolean);
   const oen=old.en||{};
   item.en={...oen,title:String(f.get('en_title')||'').trim(),cat:String(f.get('en_cat')||'').trim(),badge:String(f.get('en_badge')||'').trim(),short:String(f.get('en_short')||'').trim(),desc:String(f.get('en_desc')||'').trim(),note:String(f.get('en_note')||'').trim(),features:ln2('en_features').slice(0,10),options:ln2('en_options').slice(0,12),fields:ln2('en_fields').slice(0,6)};
@@ -1063,7 +1074,7 @@ function setLang(l,init){
   route();
 }
 function paintChrome(){
-  const lk=[['shop','শপ',''],['shop','সার্ভিস','digital'],['how','কীভাবে কিনবেন',''],['faq','প্রশ্নোত্তর','']];
+  const lk=[['shop','শপ',''],['how','কীভাবে কিনবেন',''],['faq','প্রশ্নোত্তর','']];
   const nav=$('.links');nav.setAttribute('aria-label',T('প্রধান মেনু'));
   nav.innerHTML=lk.map(x=>`<a href="#" data-act="goto" data-to="${x[0]}"${x[2]?` data-kind="${x[2]}"`:''}>${T(x[1])}</a>`).join('');
   $('#btnTheme').setAttribute('aria-label',T('থিম বদলান'));
@@ -1092,13 +1103,13 @@ function route(){
 const SB_URL='https://tdliezgyqncsxltrbhta.supabase.co',SB_KEY='sb_publishable_b1tJ4DrQhjkSZfQDhNNnlg_xZ998QWu';
 function rowToItem(r){
   const opts=Array.isArray(r.options)?r.options:[],fl=Array.isArray(r.fields)?r.fields:[];
-  return {id:r.id,kind:r.kind,title:r.title,cat:r.category||'',art:r.art||'box',hue:+r.hue||20,price:+r.price,old:+r.old_price||0,stock:r.stock,badge:r.badge||'',feat:!!r.featured,active:r.active!==false,sort:+r.sort||0,short:r.short||'',desc:r.description||'',features:Array.isArray(r.features)?r.features:[],note:r.note||'',image:r.image_url||'',
+  return {id:r.id,kind:r.kind,section:r.section||'',title:r.title,cat:r.category||'',art:r.art||'box',hue:+r.hue||20,price:+r.price,old:+r.old_price||0,stock:r.stock,badge:r.badge||'',feat:!!r.featured,active:r.active!==false,sort:+r.sort||0,short:r.short||'',desc:r.description||'',features:Array.isArray(r.features)?r.features:[],note:r.note||'',image:r.image_url||'',
     options:opts.map(o=>({label:o.name,price:+o.price})),fields:fl.map(f=>({k:f.k,label:f.label,ph:f.ph||'',req:!!f.req})),
     en:{title:r.title_en||'',cat:r.category_en||'',badge:r.badge_en||'',short:r.short_en||'',desc:r.description_en||'',note:r.note_en||'',features:Array.isArray(r.features_en)?r.features_en:[],options:opts.map(o=>o.name_en||''),fields:fl.map(f=>f.label_en||''),phs:fl.map(f=>f.ph_en||'')}};
 }
 function itemToRow(p){
   const en=p.en||{};
-  return {id:p.id,kind:p.kind,title:p.title,title_en:en.title||null,short:p.short||null,short_en:en.short||null,description:p.desc||null,description_en:en.desc||null,category:p.cat||null,category_en:en.cat||null,badge:p.badge||null,badge_en:en.badge||null,price:+p.price,old_price:+p.old>0?+p.old:null,stock:p.kind==='physical'&&p.stock!=null?+p.stock:null,
+  return {id:p.id,kind:p.kind,section:secOf(p),title:p.title,title_en:en.title||null,short:p.short||null,short_en:en.short||null,description:p.desc||null,description_en:en.desc||null,category:p.cat||null,category_en:en.cat||null,badge:p.badge||null,badge_en:en.badge||null,price:+p.price,old_price:+p.old>0?+p.old:null,stock:p.kind==='physical'&&p.stock!=null?+p.stock:null,
     options:(p.options||[]).map((o,i)=>({name:o.label,name_en:(en.options&&en.options[i])||null,price:+o.price})),features:p.features||[],features_en:en.features||[],
     fields:(p.fields||[]).map((f,i)=>({k:f.k,label:f.label,label_en:(en.fields&&en.fields[i])||'',ph:f.ph||'',ph_en:(en.phs&&en.phs[i])||'',req:!!f.req})),
     art:p.art||'box',hue:+p.hue||20,note:p.note||null,note_en:en.note||null,image_url:p.image||null,featured:!!p.feat,active:p.active!==false,sort:+p.sort||0};

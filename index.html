@@ -168,6 +168,15 @@ html:has(dialog[open]){overflow:hidden}
 
 /* sections */
 section.sec{padding-block:72px}
+.fab{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:40;height:56px;min-width:56px;padding:0 18px 0 16px;border-radius:999px;background:#25D366;color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font:600 15px var(--font);box-shadow:0 10px 28px -8px rgba(37,211,102,.7),0 2px 8px rgba(0,0,0,.18);transition:transform .3s var(--spring,cubic-bezier(.34,1.56,.64,1)),box-shadow .3s}
+.fab:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 16px 34px -8px rgba(37,211,102,.8),0 2px 8px rgba(0,0,0,.2)} .fab:active{transform:scale(.94)}
+.fab[hidden]{display:none}
+.fab span{display:none}
+@media (min-width:860px){.fab span{display:inline}}
+@media (max-width:859px){.fab{padding:0;width:56px}}
+.fab::before{content:"";position:absolute;inset:0;border-radius:inherit;background:#25D366;opacity:.5;z-index:-1;animation:fabp 2.6s ease-out infinite}
+@keyframes fabp{0%{transform:scale(1);opacity:.45}70%,100%{transform:scale(1.35);opacity:0}}
+@media (prefers-reduced-motion:reduce){.fab::before{animation:none;display:none}.fab{transition:none}}
 .amp{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-weight:700}
 .sec-h{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:14px;margin-bottom:28px}
 .sec-h h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.02em}
@@ -392,6 +401,7 @@ footer .fl{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
   <button class="ibtn" data-act="cart" id="btnCart" aria-label="কার্ট"><span id="cartIc"></span><span class="lbl" id="cartLbl"></span><span class="badge" id="badge" hidden>0</span></button>
 </div></header>
 <main id="main"></main>
+<a class="fab" id="waFab" target="_blank" rel="noopener" hidden><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.7-5.4A8.5 8.5 0 1 1 21 11.5z"/><path d="M9 8.8c.3 2.6 2.6 5 5.4 5.6l1.3-1.5-2-1-.9.8c-.9-.4-1.7-1.2-2.1-2.1l.8-.9-1-2z" fill="currentColor" stroke="none"/></svg><span id="waFabT"></span></a>
 <footer><div id="footTrust"></div><div class="wrap"><div><b style="color:var(--ink);letter-spacing:.12em">MODEX</b> <span style="letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-weight:700;margin-left:6px">Premium Lifestyle</span></div><div id="footR" class="fl"></div></div></footer>
 <dialog id="dP" class="sheet"></dialog>
 <dialog id="dC" class="drawer"></dialog>
@@ -630,7 +640,8 @@ const EN = {
 "পেমেন্ট: {v}":"Payment: {v}",
 "এখনও কোনো অর্ডার নেই।":"You have no orders yet.",
 "হ্যালো Modex, আমার একটি প্রশ্ন আছে।":"Hello Modex, I have a question.",
-"WhatsApp-এ যোগাযোগ করুন":"Contact us on WhatsApp"
+"WhatsApp-এ যোগাযোগ করুন":"Contact us on WhatsApp",
+"WhatsApp-এ মেসেজ করুন":"Message us on WhatsApp"
 };
 Object.assign(EN,{
  'পলিসি':'Policies','অর্ডার বাতিল করুন':'Cancel order','নিশ্চিত?':'Sure?','বাতিল করা যায়নি।':'Could not cancel.','অর্ডার বাতিল হয়েছে':'Order cancelled',
@@ -1092,6 +1103,7 @@ function applySettings(){
   const a=$('#announce');const ann=(LANG==='en'&&S.st.announcementEn)?S.st.announcementEn:S.st.announcement;
   a.hidden=!ann;$('#announceT').textContent=ann||'';
   const wa=waLink(T('হ্যালো Modex, আমার একটি প্রশ্ন আছে।'));
+  {const fb=$('#waFab');if(fb){fb.hidden=!wa;if(wa)fb.href=wa;const l=T('WhatsApp-এ মেসেজ করুন');fb.setAttribute('aria-label',l);$('#waFabT').textContent=l}}
   $('#footR').innerHTML=`<a href="#" data-act="policy">${T('পলিসি')}</a>`+(wa?`<a href="${esc(wa)}" target="_blank" rel="noopener">${T('WhatsApp-এ যোগাযোগ করুন')}</a>`:'')+'<span>© 2026 Modex</span>'+(S.admin?`<a href="#" data-act="admin">${T('অ্যাডমিন')}</a>`:'');
   const f=$('#faq');if(f&&S.route==='home'){const n=document.createElement('div');n.innerHTML=faqHTML();f.replaceWith(n.firstElementChild);observe()}
 }

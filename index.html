@@ -698,7 +698,7 @@ function trustHTML(){
   return `<div class="wrap trust">${X.filter((_,i)=>i!==1).map(x=>`<div>${ui(x[0],24)}<div><b>${x[1]}</b><span>${x[2]}</span></div></div>`).join('')}</div>`;
 }
 function shopHTML(){
-  return `<section class="sec wrap" id="shop"><div class="sec-h"><div><h2>${T('সব পণ্য ও সার্ভিস')}</h2><p>${T('গ্যাজেট থেকে ডিজিটাল সার্ভিস, যা দরকার বেছে নিন।')}</p></div></div>
+  return `<section class="sec wrap" id="shop"><div class="sec-h"><div><h2>${T('সব পণ্য ও সার্ভিস')}</h2></div></div>
   <div class="bar"><div class="tabs" role="group" aria-label="${T('ফিল্টার')}">${[['all',T('সব')],['physical',T('গ্যাজেট')],['digital',T('ডিজিটাল সার্ভিস')]].map(x=>`<button data-act="tab" data-k="${x[0]}" aria-pressed="${S.f.kind===x[0]}">${x[1]}</button>`).join('')}</div>
   <label class="field">${ui('search',18)}<input id="q" type="search" placeholder="${T('খুঁজুন…')}" value="${esc(S.f.q)}" aria-label="${T('খুঁজুন')}" autocomplete="off"></label>
   <select id="sort" aria-label="${T('সাজান')}"><option value="feat">${T('ফিচার্ড আগে')}</option><option value="low">${T('দাম: কম থেকে বেশি')}</option><option value="high">${T('দাম: বেশি থেকে কম')}</option></select></div>

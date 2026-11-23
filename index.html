@@ -152,8 +152,9 @@ html:has(dialog[open]){overflow:hidden}
 .hero.paused .pill.on::after{animation-play-state:paused}
 .pill:focus-visible{outline-color:#fff}
 @media (min-width:860px){
-  .track{height:620px}
-  .hero-in{grid-template-columns:1.05fr .95fr;grid-template-rows:1fr;gap:40px;padding-block:56px 70px}
+  .track{height:clamp(390px,46vh,470px)}
+  section.sec#shop{padding-top:36px}
+  .hero-in{grid-template-columns:1.05fr .95fr;grid-template-rows:1fr;gap:40px;padding-block:36px 56px}
 }
 @keyframes drift{to{transform:translate3d(-6%,8%,0) scale(1.12)}}
 @keyframes float{50%{transform:translateY(-10px)}}
@@ -175,6 +176,9 @@ section.sec{padding-block:72px}
 .trust .ui{margin-top:3px;color:var(--accent)}
 .trust b{display:block;font-size:15px} .trust span{display:block;font-size:13px;color:var(--muted);line-height:1.5}
 @media (min-width:760px){.trust{grid-template-columns:repeat(3,1fr)}}
+#footTrust .trust{padding-block:0 28px;margin-bottom:28px;border-bottom:1px solid var(--line)}
+@media (min-width:1400px){.wrap{max-width:1320px}}
+@media (min-width:860px){#shop .sec-h{margin-bottom:16px}#shop .sec-h>div{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}#shop .sec-h p{margin-top:0}#shop .sec-h h2{font-size:clamp(26px,2.6vw,34px)}}
 
 /* shop */
 .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:22px}
@@ -386,7 +390,7 @@ footer .fl{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
   <button class="ibtn" data-act="cart" id="btnCart" aria-label="কার্ট"><span id="cartIc"></span><span class="lbl" id="cartLbl"></span><span class="badge" id="badge" hidden>0</span></button>
 </div></header>
 <main id="main"></main>
-<footer><div class="wrap"><div><b style="color:var(--ink);letter-spacing:.12em">MODEX</b> <span style="letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-weight:700;margin-left:6px">Premium Lifestyle</span></div><div id="footR" class="fl"></div></div></footer>
+<footer><div id="footTrust"></div><div class="wrap"><div><b style="color:var(--ink);letter-spacing:.12em">MODEX</b> <span style="letter-spacing:.14em;text-transform:uppercase;font-size:11px;font-weight:700;margin-left:6px">Premium Lifestyle</span></div><div id="footR" class="fl"></div></div></footer>
 <dialog id="dP" class="sheet"></dialog>
 <dialog id="dC" class="drawer"></dialog>
 <dialog id="dK" class="sheet"></dialog>
@@ -712,7 +716,8 @@ function faqHTML(){
   return `<section class="sec wrap rv" id="faq"><div class="sec-h"><h2>${T('প্রশ্নোত্তর')}</h2></div><div class="faq">${Q.slice(0,3).map(q=>`<details><summary>${esc(q[0])}</summary><p>${esc(q[1])}</p></details>`).join('')}</div></section>`;
 }
 function renderHome(){
-  $('#main').innerHTML=heroHTML()+trustHTML()+shopHTML()+howHTML()+faqHTML();
+  $('#main').innerHTML=heroHTML()+shopHTML()+howHTML()+faqHTML();
+  $('#footTrust').innerHTML=trustHTML();
   $('#sort').value=S.f.sort;
   initHero();renderGrid();observe();
 }

@@ -107,7 +107,7 @@ html:has(dialog[open]){overflow:hidden}
 .btn.glass{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(10px)} .btn.glass:hover{background:rgba(255,255,255,.2)}
 
 /* hero */
-.hero{position:relative;color:#fff;overflow:hidden;background:#0D0D10;--px:0;--py:0}
+.hero{position:relative;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none;background:#0D0D10;--px:0;--py:0}
 .track{position:relative;height:660px}
 .slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .9s var(--ease),visibility .9s}
 .slide.active{opacity:1;visibility:visible}
@@ -759,7 +759,7 @@ const slides = ()=>SECS.map((x,i)=>{
 function heroHTML(){
   const SL=slides();
   const sl=SL.map((s,i)=>`<div class="slide${i===0?' active':''}" style="--h:${s.hue}" role="group" aria-roledescription="${T('স্লাইড')}" aria-label="${i+1}/${SL.length}"><div class="bg"></div><div class="wrap hero-in"><div class="copy"><span class="eyebrow">${esc(s.eye)}</span><h1 class="h1">${s.h.split(' ').map((w,j)=>`<span style="--i:${j}">${esc(w)}</span>`).join(' ')}</h1><p>${esc(s.p)}</p><div class="cta"><a href="#" class="btn light" data-act="goto" data-to="shop" data-kind="${s.a[1]}">${esc(s.a[0])}${ui('arrow',18)}</a><a href="#" class="btn glass" data-act="goto" data-to="shop" data-kind="${s.b[1]}">${esc(s.b[0])}</a></div></div><div class="stage" aria-hidden="true">${s.stage}</div></div></div>`).join('');
-  return `<section class="hero" id="hero" aria-roledescription="${T('ক্যারোসেল')}" aria-label="${T('ফিচার্ড')}"><div class="track">${sl}</div><div class="pills"><div class="wrap">${SL.map((s,i)=>`<button class="pill${i===0?' on':''}" data-act="slide" data-i="${i}" aria-label="${T('স্লাইড {n}',{n:i+1})}"></button>`).join('')}</div></div></section>`;
+  return `<section class="hero" id="hero" aria-roledescription="${T('ক্যারোসেল')}" aria-label="${T('ফিচার্ড')}"><div class="track">${sl}</div><div class="pills"><div class="wrap">${SL.map((s,i)=>`<button class="pill${i===0?' on':''}" data-act="slide" data-i="${i}" data-k="${esc(SECS[i]?SECS[i][0]:'all')}" aria-label="${T('স্লাইড {n}',{n:i+1})}"></button>`).join('')}</div></div></section>`;
 }
 function trustHTML(){
   const X=[['shield',T('নিরাপদ পেমেন্ট'),T('বিকাশ ও নগদে সহজ পেমেন্ট')],['bolt',T('দ্রুত ডেলিভারি'),T('ডিজিটাল সার্ভিস অনলাইনে, গ্যাজেট বাড়ির দরজায়')],['pkg',T('যাচাই করা পণ্য'),T('ডেলিভারির আগে প্রতিটি পণ্য পরীক্ষা')],['chat',T('সরাসরি সাপোর্ট'),T('অর্ডার নিয়ে যেকোনো প্রশ্নে পাশে আছি')]];
@@ -834,8 +834,12 @@ function initHero(){
     const r=h.getBoundingClientRect();const x=((e.clientX-r.left)/r.width-.5)*2,y=((e.clientY-r.top)/r.height-.5)*2;
     cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{h.style.setProperty('--px',(x*12).toFixed(2));h.style.setProperty('--py',(y*12).toFixed(2))});
   });
-  h.addEventListener('pointerenter',e=>{if(e.pointerType!=='touch'){clearInterval(timer);h.classList.add('paused')}});
-  h.addEventListener('pointerleave',()=>{h.classList.remove('paused');go(cur);startAuto()});
+  /* press and hold anywhere on the cover to freeze it; hovering alone never pauses */
+  let held=false;
+  const hold=()=>{if(held)return;held=true;clearInterval(timer);h.classList.add('paused')};
+  const free=()=>{if(!held)return;held=false;h.classList.remove('paused');const p=$('.pill.on');if(p){p.classList.remove('on');void p.offsetWidth;p.classList.add('on')}startAuto()};
+  h.addEventListener('pointerdown',e=>{if(e.button===0||e.pointerType!=='mouse')hold()});
+  addEventListener('pointerup',free);addEventListener('pointercancel',free);addEventListener('blur',free);
   let sx=0;
   h.addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
   h.addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-sx;if(Math.abs(d)>50){go(cur+(d<0?1:-1));startAuto()}},{passive:true});
@@ -1298,7 +1302,7 @@ document.addEventListener('click',async e=>{
    case 'lang':if(el.dataset.l!==LANG)setLang(el.dataset.l);break;
    case 'cart':openCart();break;
    case 'close':{const d=el.closest('dialog');if(d)d.close();break}
-   case 'slide':go(+el.dataset.i);startAuto();break;
+   case 'slide':go(+el.dataset.i);startAuto();if(el.dataset.k&&SECS.some(x=>x[0]===el.dataset.k)){S.f.kind=el.dataset.k;renderGrid()}break;
    case 'tab':S.f.kind=el.dataset.k;renderGrid();break;
    case 'open':openProduct(el.dataset.id);break;
    case 'quick':{const p=S.items.find(x=>x.id===el.dataset.id);if(!p)break;if(p.options&&p.options.length>1)openProduct(p.id);else addCart(p.id,-1,1);break}

@@ -106,6 +106,32 @@ html:has(dialog[open]){overflow:hidden}
 .btn.light{background:#fff;color:#111} .btn.light:hover{box-shadow:0 12px 30px -10px rgba(255,255,255,.6)}
 .btn.glass{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(10px)} .btn.glass:hover{background:rgba(255,255,255,.2)}
 
+
+/* 3D smartwatch cover: pure CSS 3D (no library, no extra request). Layers fly together, then the whole watch turns slowly. */
+.w3{position:absolute;inset:0;perspective:1100px}
+.w3-in{position:absolute;left:50%;top:58%;width:0;height:0;transform-style:preserve-3d;transform:translate3d(calc(var(--px)*.8px),calc(var(--py)*.8px),0) rotateX(58deg) rotateZ(calc(-32deg + var(--px)*.5deg));animation:w3turn 9s ease-in-out infinite alternate;--k:5}
+.w3 .l{position:absolute;left:0;top:0;translate:-50% -50%;transform:translateZ(calc(var(--z)*1px));opacity:0}
+.slide.active .w3 .l{animation:w3asm 4s linear both;animation-delay:var(--dl,0s)}
+.hero.paused .w3 .l,.hero.paused .w3-in,.hero.paused .w3 .sec-hand{animation-play-state:paused}
+.w3 .strap{width:84px;height:140px;border-radius:26px;background:linear-gradient(90deg,#16161b,#2c2c35 50%,#16161b);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),inset 0 0 0 7px #1b1b21,inset 0 0 0 8px rgba(255,255,255,.1)}
+.w3 .st-a{left:0;top:-128px}.w3 .st-b{left:0;top:128px}
+.w3 .back{width:196px;height:196px;border-radius:50%;background:conic-gradient(from 30deg,#d9dde4,#7d828d,#e9ecf1,#6d727c,#d9dde4);box-shadow:inset 0 0 0 10px rgba(0,0,0,.22)}
+.w3 .board{width:160px;height:160px;border-radius:50%;background:radial-gradient(circle at 50% 50%,#e8b04a 0 18%,#0e4a3a 19% 100%);box-shadow:inset 0 0 0 3px rgba(232,176,74,.7)}
+.w3 .board::after{content:"";position:absolute;inset:26px;border-radius:50%;border:2px dashed rgba(232,176,74,.55)}
+.w3 .dial{width:172px;height:172px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#2a2a33,#0b0b0f 70%);box-shadow:0 0 0 3px #aeb3bd,0 0 0 7px #4b4f58}
+.w3 .dial::before{content:"";position:absolute;inset:10px;border-radius:50%;background:repeating-conic-gradient(#ffb347 0 1.2deg,transparent 1.2deg 30deg);-webkit-mask:radial-gradient(circle,transparent 0 62%,#000 63% 70%,transparent 71%);mask:radial-gradient(circle,transparent 0 62%,#000 63% 70%,transparent 71%)}
+.w3 .hand{position:absolute;left:50%;top:50%;width:4px;border-radius:2px;background:#fff;transform-origin:50% 100%}
+.w3 .h-h{height:38px;margin:-38px 0 0 -2px;transform:rotate(300deg)}
+.w3 .h-m{height:56px;width:3px;margin:-56px 0 0 -1.5px;transform:rotate(60deg)}
+.w3 .sec-hand{height:62px;width:2px;margin:-62px 0 0 -1px;background:#ff5c20;animation:w3sec 6s linear infinite}
+.w3 .hub{position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px;border-radius:50%;background:#ff5c20}
+.w3 .glass{width:184px;height:184px;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,.28),rgba(255,255,255,.04) 45%,rgba(255,255,255,.12));border:1px solid rgba(255,255,255,.4);backdrop-filter:none}
+.w3 .crown{width:20px;height:42px;border-radius:6px;background:linear-gradient(90deg,#8d929c,#e8ebf0,#8d929c);left:108px;top:0}
+.w3 .shadow{width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,.55),transparent 68%);filter:blur(6px);opacity:.9}
+@keyframes w3asm{0%{opacity:0;transform:translateZ(calc(var(--z)*1px*var(--k,5)))}16%{opacity:1;transform:translateZ(calc(var(--z)*1px*var(--k,5)));animation-timing-function:cubic-bezier(.65,0,.25,1)}66%,100%{opacity:1;transform:translateZ(calc(var(--z)*1px))}}
+@keyframes w3turn{from{rotate:z -10deg}to{rotate:z 14deg}}
+@keyframes w3sec{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.w3 .l{opacity:1!important;animation:none!important}}
 /* hero */
 .hero{position:relative;color:#fff;overflow:hidden;user-select:none;-webkit-user-select:none;background:#0D0D10;--px:0;--py:0}
 .track{position:relative;height:660px}
@@ -739,7 +765,7 @@ const HERO_MS=4000;
 const gstage=(main,t,sub,i2,i3)=>`<div class="gc g-a" style="--d:1.2"><div class="in">${ic(main,'w')}<b>${esc(t)}</b><span>${esc(sub)}</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic(i2,'w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic(i3,'w')}</div></div>`;
 const HERO={
  gadget:{hue:18,h:'আপনার প্রযুক্তি, আরও স্মার্ট।',p:'যাচাই করা গ্যাজেট, নির্ভরযোগ্য ডেলিভারি আর সরাসরি সাপোর্ট, সবকিছু এক জায়গায়।',a:'গ্যাজেট দেখুন',
-  stage:()=>`<div class="gc g-a" style="--d:1.2"><div class="in">${ic('watch','w')}<b>Smart Watch</b><span>Modex Fit</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic('buds','w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic('power','w')}</div></div>`},
+  stage:()=>`<div class="w3" role="img" aria-label="Smart Watch"><div class="w3-in"><div class="l shadow" style="--z:-14;--dl:.05s"></div><div class="l strap st-a" style="--z:0;--dl:.1s"></div><div class="l strap st-b" style="--z:0;--dl:.1s"></div><div class="l back" style="--z:6;--dl:.2s"></div><div class="l board" style="--z:14;--dl:.3s"></div><div class="l dial" style="--z:22;--dl:.4s"><i class="hand h-h"></i><i class="hand h-m"></i><i class="hand sec-hand"></i><i class="hub"></i></div><div class="l crown" style="--z:16;--dl:.45s"></div><div class="l glass" style="--z:32;--dl:.55s"></div></div></div>`},
  digital_service:{hue:165,h:'কাজ হবে অনলাইনে, ফলাফল হাতে।',p:'ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।',a:'ডিজিটাল সার্ভিস দেখুন',
   stage:()=>`<div class="chip c1" style="--d:1"><span>${ic('spark','w')}</span><div><b>${T('সাবস্ক্রিপশন')}</b><small>${T('AI সহকারী সার্ভিস')}</small></div></div><div class="chip c2" style="--d:1.8"><span>${ic('web','w')}</span><div><b>${T('ওয়েবসাইট সেটআপ')}</b><small>${T('মোবাইল-ফ্রেন্ডলি')}</small></div><i>${T('নতুন')}</i></div><div class="chip c3" style="--d:.7"><span>${ic('thumb','w')}</span><div><b>${T('থাম্বনেইল ডিজাইন')}</b><small>${T('ভিডিও অনুযায়ী')}</small></div></div>`},
  digital_product:{hue:345,h:'পাসওয়ার্ড ছাড়াই, নিরাপদে।',p:'আমরা কখনো আপনার পাসওয়ার্ড, PIN বা OTP চাই না। বিকাশ বা নগদে পেমেন্ট করুন, বাকিটা আমরা সামলাব।',a:'টপ-আপ দেখুন',

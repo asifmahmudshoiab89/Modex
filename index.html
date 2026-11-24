@@ -115,9 +115,9 @@ html:has(dialog[open]){overflow:hidden}
 .slide .bg::before,.slide .bg::after{content:"";position:absolute;border-radius:50%;filter:blur(30px);will-change:transform}
 .slide .bg::before{width:70%;aspect-ratio:1;right:-8%;top:-18%;animation:drift 16s ease-in-out infinite alternate}
 .slide .bg::after{width:50%;aspect-ratio:1;left:-12%;bottom:-30%;animation:drift 21s ease-in-out infinite alternate-reverse}
-.s1{background:#0D0D10}.s1 .bg::before{background:radial-gradient(circle,rgba(255,92,32,.6),transparent 65%)}.s1 .bg::after{background:radial-gradient(circle,rgba(255,170,90,.2),transparent 65%)}
-.s2{background:#041F26}.s2 .bg::before{background:radial-gradient(circle,rgba(36,214,168,.5),transparent 65%)}.s2 .bg::after{background:radial-gradient(circle,rgba(90,200,255,.16),transparent 65%)}
-.s3{background:#220A16}.s3 .bg::before{background:radial-gradient(circle,rgba(255,74,108,.55),transparent 65%)}.s3 .bg::after{background:radial-gradient(circle,rgba(255,170,120,.18),transparent 65%)}
+.slide{background:hsl(var(--h,18) 38% 7%)}
+.slide .bg::before{background:radial-gradient(circle,hsl(var(--h,18) 100% 58%/.55),transparent 65%)}
+.slide .bg::after{background:radial-gradient(circle,hsl(calc(var(--h,18) + 25) 100% 70%/.18),transparent 65%)}
 .hero-in{position:relative;height:100%;display:grid;grid-template-columns:1fr;grid-template-rows:auto 1fr;align-items:center;gap:10px;padding-block:42px 64px}
 .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.7)}
 .eyebrow::before{content:"";width:22px;height:2px;border-radius:2px;background:currentColor}
@@ -154,7 +154,7 @@ html:has(dialog[open]){overflow:hidden}
 .pills .wrap{display:flex;gap:8px;align-items:center}
 .pill{position:relative;width:34px;height:6px;border-radius:3px;background:rgba(255,255,255,.25);overflow:hidden;padding:0}
 .pill::after{content:"";position:absolute;inset:0;background:#fff;transform-origin:left;transform:scaleX(0)}
-.pill.on::after{animation:prog 6.5s linear forwards}
+.pill.on::after{animation:prog 4s linear forwards}
 .hero.paused .pill.on::after{animation-play-state:paused}
 .pill:focus-visible{outline-color:#fff}
 @media (min-width:860px){
@@ -529,6 +529,17 @@ const EN = {
 "ভিডিও অনুযায়ী":"Made for your video",
 "পাসওয়ার্ড লাগে না":"No password needed",
 "স্লাইড":"slide",
+"{n} দেখুন":"Browse {n}",
+"ডিজিটাল সার্ভিস দেখুন":"View digital services",
+"পছন্দের পোশাক, সহজ অর্ডার।":"Clothing you love, easy to order.",
+"পোশাক দেখুন, অপশন বেছে নিন, বিকাশ বা নগদে পেমেন্ট করুন।":"Browse clothing, pick your option, pay with bKash or Nagad.",
+"প্রতিটি পদক্ষেপে আরাম।":"Comfort in every step.",
+"জুতার সংগ্রহ দেখুন, অপশন বেছে অর্ডার দিন, বিকাশ বা নগদে পেমেন্ট করুন।":"Browse shoes, pick your option, order and pay with bKash or Nagad.",
+"পছন্দের খাবার, এক ক্লিকে অর্ডার।":"Food you love, ordered in a click.",
+"খাবারের তালিকা দেখুন, অর্ডার দিন, বিকাশ বা নগদে পেমেন্ট করুন।":"Browse the food list, order, and pay with bKash or Nagad.",
+"ঘরের বাজার, এক জায়গায়।":"Your household shopping, in one place.",
+"প্রতিদিনের গ্রোসারি পণ্য দেখুন আর সহজে অর্ডার করুন।":"Browse everyday grocery items and order easily.",
+"এই ক্যাটাগরির সব পণ্য দেখুন আর সহজে অর্ডার করুন।":"Browse everything in this category and order easily.",
 "স্লাইড {n}":"Slide {n}",
 "ক্যারোসেল":"carousel",
 "ফিচার্ড":"Featured",
@@ -722,17 +733,32 @@ function shipFee(T,area){
 }
 
 /* ---------- home ---------- */
-const slides = ()=>[
- {c:'s1',eye:T('গ্যাজেট'),h:T('আপনার প্রযুক্তি, আরও স্মার্ট।'),p:T('যাচাই করা গ্যাজেট, নির্ভরযোগ্য ডেলিভারি আর সরাসরি সাপোর্ট, সবকিছু এক জায়গায়।'),a:[T('গ্যাজেট দেখুন'),'gadget'],b:[T('সব পণ্য'),'all'],
-  stage:`<div class="gc g-a" style="--d:1.2"><div class="in">${ic('watch','w')}<b>Smart Watch</b><span>Modex Fit</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic('buds','w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic('power','w')}</div></div>`},
- {c:'s2',eye:T('ডিজিটাল সার্ভিস'),h:T('কাজ হবে অনলাইনে, ফলাফল হাতে।'),p:T('ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।'),a:[T('ডিজিটাল পণ্য দেখুন'),'digital_product'],b:[T('সব পণ্য'),'all'],
-  stage:`<div class="chip c1" style="--d:1"><span>${ic('spark','w')}</span><div><b>${T('সাবস্ক্রিপশন')}</b><small>${T('AI সহকারী সার্ভিস')}</small></div></div><div class="chip c2" style="--d:1.8"><span>${ic('web','w')}</span><div><b>${T('ওয়েবসাইট সেটআপ')}</b><small>${T('মোবাইল-ফ্রেন্ডলি')}</small></div><i>${T('নতুন')}</i></div><div class="chip c3" style="--d:.7"><span>${ic('thumb','w')}</span><div><b>${T('থাম্বনেইল ডিজাইন')}</b><small>${T('ভিডিও অনুযায়ী')}</small></div></div>`},
- {c:'s3',eye:T('নিরাপদ টপ-আপ'),h:T('পাসওয়ার্ড ছাড়াই, নিরাপদে।'),p:T('আমরা কখনো আপনার পাসওয়ার্ড, PIN বা OTP চাই না। বিকাশ বা নগদে পেমেন্ট করুন, বাকিটা আমরা সামলাব।'),a:[T('টপ-আপ দেখুন'),'digital_product'],b:[T('সব পণ্য'),'all'],
-  stage:`<div class="coin-wrap"><div class="orbit"></div><div class="coin"><div class="face">${ic('coin')}</div><div class="face bk">${ic('coin')}</div></div></div><div class="lockchip">${ui('lock',16)}${T('পাসওয়ার্ড লাগে না')}</div>`}
-];
+/* hero: one cover per category in SECS. Add a category to SECS and a cover appears automatically.
+   HERO holds optional hand-written copy per category; any category without an entry gets a generic cover. */
+const HERO_MS=4000;
+const gstage=(main,t,sub,i2,i3)=>`<div class="gc g-a" style="--d:1.2"><div class="in">${ic(main,'w')}<b>${esc(t)}</b><span>${esc(sub)}</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic(i2,'w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic(i3,'w')}</div></div>`;
+const HERO={
+ gadget:{hue:18,h:'আপনার প্রযুক্তি, আরও স্মার্ট।',p:'যাচাই করা গ্যাজেট, নির্ভরযোগ্য ডেলিভারি আর সরাসরি সাপোর্ট, সবকিছু এক জায়গায়।',a:'গ্যাজেট দেখুন',
+  stage:()=>`<div class="gc g-a" style="--d:1.2"><div class="in">${ic('watch','w')}<b>Smart Watch</b><span>Modex Fit</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic('buds','w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic('power','w')}</div></div>`},
+ digital_service:{hue:165,h:'কাজ হবে অনলাইনে, ফলাফল হাতে।',p:'ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।',a:'ডিজিটাল সার্ভিস দেখুন',
+  stage:()=>`<div class="chip c1" style="--d:1"><span>${ic('spark','w')}</span><div><b>${T('সাবস্ক্রিপশন')}</b><small>${T('AI সহকারী সার্ভিস')}</small></div></div><div class="chip c2" style="--d:1.8"><span>${ic('web','w')}</span><div><b>${T('ওয়েবসাইট সেটআপ')}</b><small>${T('মোবাইল-ফ্রেন্ডলি')}</small></div><i>${T('নতুন')}</i></div><div class="chip c3" style="--d:.7"><span>${ic('thumb','w')}</span><div><b>${T('থাম্বনেইল ডিজাইন')}</b><small>${T('ভিডিও অনুযায়ী')}</small></div></div>`},
+ digital_product:{hue:345,h:'পাসওয়ার্ড ছাড়াই, নিরাপদে।',p:'আমরা কখনো আপনার পাসওয়ার্ড, PIN বা OTP চাই না। বিকাশ বা নগদে পেমেন্ট করুন, বাকিটা আমরা সামলাব।',a:'টপ-আপ দেখুন',
+  stage:()=>`<div class="coin-wrap"><div class="orbit"></div><div class="coin"><div class="face">${ic('coin')}</div><div class="face bk">${ic('coin')}</div></div></div><div class="lockchip">${ui('lock',16)}${T('পাসওয়ার্ড লাগে না')}</div>`},
+ clothing:{hue:268,h:'পছন্দের পোশাক, সহজ অর্ডার।',p:'পোশাক দেখুন, অপশন বেছে নিন, বিকাশ বা নগদে পেমেন্ট করুন।',ic:['shirt','box','spark']},
+ shoes:{hue:210,h:'প্রতিটি পদক্ষেপে আরাম।',p:'জুতার সংগ্রহ দেখুন, অপশন বেছে অর্ডার দিন, বিকাশ বা নগদে পেমেন্ট করুন।',ic:['shoe','box','spark']},
+ food:{hue:95,h:'পছন্দের খাবার, এক ক্লিকে অর্ডার।',p:'খাবারের তালিকা দেখুন, অর্ডার দিন, বিকাশ বা নগদে পেমেন্ট করুন।',ic:['apple','basket','box']},
+ grocery:{hue:45,h:'ঘরের বাজার, এক জায়গায়।',p:'প্রতিদিনের গ্রোসারি পণ্য দেখুন আর সহজে অর্ডার করুন।',ic:['basket','apple','box']}
+};
+const slides = ()=>SECS.map((x,i)=>{
+  const k=x[0],H=HERO[k]||{},nm=T(x[1]);
+  const ics=H.ic||['box','spark','basket'];
+  return {hue:H.hue!=null?H.hue:(i*47+18)%360,eye:nm,h:T(H.h||nm),p:T(H.p||'এই ক্যাটাগরির সব পণ্য দেখুন আর সহজে অর্ডার করুন।'),
+    a:[H.a?T(H.a):T('{n} দেখুন',{n:nm}),k],b:[T('সব পণ্য'),'all'],
+    stage:H.stage?H.stage():gstage(ics[0],nm,'Modex',ics[1],ics[2])};
+});
 function heroHTML(){
   const SL=slides();
-  const sl=SL.map((s,i)=>`<div class="slide ${s.c}${i===0?' active':''}" role="group" aria-roledescription="${T('স্লাইড')}" aria-label="${i+1}/${SL.length}"><div class="bg"></div><div class="wrap hero-in"><div class="copy"><span class="eyebrow">${esc(s.eye)}</span><h1 class="h1">${s.h.split(' ').map((w,j)=>`<span style="--i:${j}">${esc(w)}</span>`).join(' ')}</h1><p>${esc(s.p)}</p><div class="cta"><a href="#" class="btn light" data-act="goto" data-to="shop" data-kind="${s.a[1]}">${esc(s.a[0])}${ui('arrow',18)}</a><a href="#" class="btn glass" data-act="goto" data-to="shop" data-kind="${s.b[1]}">${esc(s.b[0])}</a></div></div><div class="stage" aria-hidden="true">${s.stage}</div></div></div>`).join('');
+  const sl=SL.map((s,i)=>`<div class="slide${i===0?' active':''}" style="--h:${s.hue}" role="group" aria-roledescription="${T('স্লাইড')}" aria-label="${i+1}/${SL.length}"><div class="bg"></div><div class="wrap hero-in"><div class="copy"><span class="eyebrow">${esc(s.eye)}</span><h1 class="h1">${s.h.split(' ').map((w,j)=>`<span style="--i:${j}">${esc(w)}</span>`).join(' ')}</h1><p>${esc(s.p)}</p><div class="cta"><a href="#" class="btn light" data-act="goto" data-to="shop" data-kind="${s.a[1]}">${esc(s.a[0])}${ui('arrow',18)}</a><a href="#" class="btn glass" data-act="goto" data-to="shop" data-kind="${s.b[1]}">${esc(s.b[0])}</a></div></div><div class="stage" aria-hidden="true">${s.stage}</div></div></div>`).join('');
   return `<section class="hero" id="hero" aria-roledescription="${T('ক্যারোসেল')}" aria-label="${T('ফিচার্ড')}"><div class="track">${sl}</div><div class="pills"><div class="wrap">${SL.map((s,i)=>`<button class="pill${i===0?' on':''}" data-act="slide" data-i="${i}" aria-label="${T('স্লাইড {n}',{n:i+1})}"></button>`).join('')}</div></div></section>`;
 }
 function trustHTML(){
@@ -794,11 +820,11 @@ function renderGrid(){
 /* hero carousel */
 let cur=0,timer=null;
 function go(i){
-  const n=3;cur=(i+n)%n;
+  const n=$$('.slide').length||1;cur=(i+n)%n;
   $$('.slide').forEach((s,j)=>s.classList.toggle('active',j===cur));
   $$('.pill').forEach((p,j)=>{p.classList.remove('on');if(j===cur){void p.offsetWidth;p.classList.add('on')}});
 }
-function startAuto(){clearInterval(timer);if(RM)return;timer=setInterval(()=>go(cur+1),6500)}
+function startAuto(){clearInterval(timer);if(RM)return;timer=setInterval(()=>go(cur+1),HERO_MS)}
 function initHero(){
   cur=0;const h=$('#hero');if(!h)return;
   startAuto();

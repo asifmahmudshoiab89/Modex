@@ -219,16 +219,18 @@ select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,va
 .art{position:relative;aspect-ratio:4/3;display:grid;place-items:center;overflow:hidden;background:linear-gradient(150deg,hsl(var(--h) 70% var(--tl1)),hsl(calc(var(--h) + 24) 60% var(--tl2)));color:hsl(var(--h) 55% var(--il))}
 .art .ic{width:46%;max-height:70%;transition:transform .6s var(--ease)}
 .card:hover .art .ic{transform:scale(1.08) rotate(-3deg)}
-.art.img img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
-.card:hover .art.img img{transform:scale(1.05)}
+.art.img{background:var(--surface2)}
+.art.img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:transform .6s var(--ease)}
+.card .art{aspect-ratio:1}
+.card:hover .art.img img{transform:scale(1.03)}
 .tags{position:absolute;left:10px;top:10px;display:flex;gap:6px;flex-wrap:wrap}
 .tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--surface);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .tag.dg{background:var(--ink);color:var(--bg)} .tag.off{background:var(--accent);color:#fff}
-.cb{display:block;padding:14px 16px 4px}
+.cb{display:block;padding:12px 16px 0}
 .cb .cat{display:block;font-size:12px;color:var(--muted);margin-bottom:2px}
 .cb h3{font-size:16px;line-height:1.35;font-family:var(--font);font-weight:600}
-.cb .sh{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
-.pr{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px 14px 16px;margin-top:auto}
+.cb .sh{display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5}
+.pr{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px 14px 16px;margin-top:auto}
 .pr b{font:700 18px var(--display)} .pr s{display:block;font-size:12px;color:var(--muted)} .pr small{display:block;font-size:11px;color:var(--muted)}
 .add{width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;transition:transform .25s var(--ease),box-shadow .25s;flex:none}
 .add:hover{box-shadow:0 8px 20px -6px var(--accent);transform:scale(1.06)} .add:active{transform:scale(.92)}
@@ -378,7 +380,7 @@ pre.txt{white-space:pre-wrap;text-align:left;background:var(--surface2);border-r
 .card:hover{transform:translateY(-6px)}
 .card .art{overflow:hidden}
 .card .art img,.card .art .ic{transition:transform .9s var(--ease)}
-.card:hover .art img,.card:hover .art .ic{transform:scale(1.06)}
+.card:hover .art .ic{transform:scale(1.06)}
 .add{transition:transform .35s var(--spring),background-color .2s,color .2s}
 .add:hover{transform:scale(1.1) rotate(90deg)}
 .add:active{transform:scale(.9)}
@@ -776,7 +778,7 @@ function card(p,i=0){
   const from=p.options&&p.options.length>1;
   const title=tp(p,'title'),badge=tp(p,'badge');
   return `<article class="card${out?' soldout':''}" style="--n:${Math.min(i,12)}"><button class="hit" data-act="open" data-id="${esc(p.id)}" aria-label="${esc(T('{t} বিস্তারিত',{t:title}))}">${visual(p)}<span class="tags">${p.kind==='digital'?`<span class="tag dg">${T('ডিজিটাল')}</span>`:''}${off?`<span class="tag off">-${n2(off)}%</span>`:''}${badge?`<span class="tag">${esc(badge)}</span>`:''}${out?`<span class="tag">${T('স্টক শেষ')}</span>`:''}</span><span class="cb"><span class="cat">${esc(tp(p,'cat')||kindLabel(p.kind))}</span><h3>${esc(title)}</h3><span class="sh">${esc(tp(p,'short')||'')}</span></span></button>
-  <div class="pr"><div>${from?`<small>${T('শুরু')}</small>`:''}<b class="num">${money(minPrice(p))}</b>${+p.old>minPrice(p)&&!from?`<s class="num">${money(p.old)}</s>`:''}</div><div class="pa"><button class="bn" data-act="qbuy" data-id="${esc(p.id)}" aria-label="${T('এখনই কিনুন')}">${ui('bolt',16)}<span>${T('এখনই কিনুন')}</span></button><button class="add" data-act="quick" data-id="${esc(p.id)}" aria-label="${T('কার্টে যোগ করুন')}">${ui('plus',20)}</button></div></div></article>`;
+  <div class="pr"><div>${from?`<small>${T('শুরু')}</small>`:''}<b class="num">${money(minPrice(p))}</b>${+p.old>minPrice(p)&&!from?`<s class="num">${money(p.old)}</s>`:''}</div><div class="pa"><button class="bn" data-act="qbuy" data-id="${esc(p.id)}" aria-label="${T('এখনই কিনুন')}">${ui('bolt',16)}<span>${T('এখনই কিনুন')}</span></button><button class="add" data-act="quick" data-id="${esc(p.id)}" aria-label="${T('কার্টে যোগ করুন')}">${ui('cart',20)}</button></div></div></article>`;
 }
 function renderGrid(){
   const g=$('#grid');if(!g)return;

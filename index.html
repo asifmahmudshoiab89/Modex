@@ -133,16 +133,7 @@ html:has(dialog[open]){overflow:hidden}
 .gc.g-b .in{animation-delay:-2s}.gc.g-c .in{animation-delay:-4s}
 .gc .ic{width:62%;max-height:70%}
 .gc b{font:600 14px var(--display)} .gc span{font-size:12px;color:rgba(255,255,255,.65)}
-.gc .in.pc{padding:10px 10px 8px;gap:4px;cursor:pointer;color:inherit;font:inherit;width:100%;justify-content:flex-end;overflow:hidden}
-.pc .pimg{flex:1;min-height:0;width:100%;display:grid;place-items:center}
-.pc .pimg .ic{width:56%;max-height:100%}
-.pc .pimg.ph{position:relative;background:#fff;border-radius:16px;overflow:hidden}
-.pc .pimg.ph img{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);object-fit:contain}
-.pc b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:center;font-size:13px;line-height:1.25;color:#fff}
-.g-b .pc b,.g-c .pc b{font-size:12px}
-.pc span:not(.pimg){font-size:12px;font-weight:600;color:rgba(255,255,255,.75)}
-.pc:hover{background:rgba(255,255,255,.16)}
-.g-a{left:30%;top:0;width:40%;height:56%}.g-b{left:0;top:58%;width:47%;height:42%}.g-c{right:0;top:58%;width:47%;height:42%}
+.g-a{left:24%;top:4%;width:52%;height:64%}.g-b{left:0;top:44%;width:36%;height:42%}.g-c{right:0;bottom:0;width:34%;height:42%}
 .ic{stroke:currentColor;fill:none;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
 .ic .t{fill:currentColor;fill-opacity:.16}
 .w{color:#fff}
@@ -168,7 +159,6 @@ html:has(dialog[open]){overflow:hidden}
 .pill:focus-visible{outline-color:#fff}
 @media (min-width:860px){
   .track{height:clamp(390px,46vh,470px)}
-  .stage{width:min(100%,372px)}
   section.sec#shop{padding-top:36px}
   .hero-in{grid-template-columns:1.05fr .95fr;grid-template-rows:1fr;gap:40px;padding-block:36px 56px}
 }
@@ -540,7 +530,6 @@ const EN = {
 "পাসওয়ার্ড লাগে না":"No password needed",
 "স্লাইড":"slide",
 "{n} দেখুন":"Browse {n}",
-"শীঘ্রই আসছে":"Coming soon",
 "ডিজিটাল সার্ভিস দেখুন":"View digital services",
 "পছন্দের পোশাক, সহজ অর্ডার।":"Clothing you love, easy to order.",
 "পোশাক দেখুন, অপশন বেছে নিন, বিকাশ বা নগদে পেমেন্ট করুন।":"Browse clothing, pick your option, pay with bKash or Nagad.",
@@ -749,35 +738,27 @@ function shipFee(T,area){
 const HERO_MS=4000;
 const gstage=(main,t,sub,i2,i3)=>`<div class="gc g-a" style="--d:1.2"><div class="in">${ic(main,'w')}<b>${esc(t)}</b><span>${esc(sub)}</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic(i2,'w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic(i3,'w')}</div></div>`;
 const HERO={
- gadget:{hue:18,h:'আপনার প্রযুক্তি, আরও স্মার্ট।',p:'যাচাই করা গ্যাজেট, নির্ভরযোগ্য ডেলিভারি আর সরাসরি সাপোর্ট, সবকিছু এক জায়গায়।',a:'গ্যাজেট দেখুন',ic:['watch','buds','power']},
- digital_service:{hue:165,h:'কাজ হবে অনলাইনে, ফলাফল হাতে।',p:'ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।',a:'ডিজিটাল সার্ভিস দেখুন',ic:['spark','web','chat']},
- digital_product:{hue:345,h:'পাসওয়ার্ড ছাড়াই, নিরাপদে।',p:'আমরা কখনো আপনার পাসওয়ার্ড, PIN বা OTP চাই না। বিকাশ বা নগদে পেমেন্ট করুন, বাকিটা আমরা সামলাব।',a:'টপ-আপ দেখুন',ic:['coin','spark','thumb']},
+ gadget:{hue:18,h:'আপনার প্রযুক্তি, আরও স্মার্ট।',p:'যাচাই করা গ্যাজেট, নির্ভরযোগ্য ডেলিভারি আর সরাসরি সাপোর্ট, সবকিছু এক জায়গায়।',a:'গ্যাজেট দেখুন',
+  stage:()=>`<div class="gc g-a" style="--d:1.2"><div class="in">${ic('watch','w')}<b>Smart Watch</b><span>Modex Fit</span></div></div><div class="gc g-b" style="--d:.6"><div class="in">${ic('buds','w')}</div></div><div class="gc g-c" style="--d:1.9"><div class="in">${ic('power','w')}</div></div>`},
+ digital_service:{hue:165,h:'কাজ হবে অনলাইনে, ফলাফল হাতে।',p:'ডিজাইন, ওয়েবসাইট, কনসাল্টিং আর সাবস্ক্রিপশন সার্ভিস। অর্ডার দিন, বাকিটা আমরা দেখছি।',a:'ডিজিটাল সার্ভিস দেখুন',
+  stage:()=>`<div class="chip c1" style="--d:1"><span>${ic('spark','w')}</span><div><b>${T('সাবস্ক্রিপশন')}</b><small>${T('AI সহকারী সার্ভিস')}</small></div></div><div class="chip c2" style="--d:1.8"><span>${ic('web','w')}</span><div><b>${T('ওয়েবসাইট সেটআপ')}</b><small>${T('মোবাইল-ফ্রেন্ডলি')}</small></div><i>${T('নতুন')}</i></div><div class="chip c3" style="--d:.7"><span>${ic('thumb','w')}</span><div><b>${T('থাম্বনেইল ডিজাইন')}</b><small>${T('ভিডিও অনুযায়ী')}</small></div></div>`},
+ digital_product:{hue:345,h:'পাসওয়ার্ড ছাড়াই, নিরাপদে।',p:'আমরা কখনো আপনার পাসওয়ার্ড, PIN বা OTP চাই না। বিকাশ বা নগদে পেমেন্ট করুন, বাকিটা আমরা সামলাব।',a:'টপ-আপ দেখুন',
+  stage:()=>`<div class="coin-wrap"><div class="orbit"></div><div class="coin"><div class="face">${ic('coin')}</div><div class="face bk">${ic('coin')}</div></div></div><div class="lockchip">${ui('lock',16)}${T('পাসওয়ার্ড লাগে না')}</div>`},
  clothing:{hue:268,h:'পছন্দের পোশাক, সহজ অর্ডার।',p:'পোশাক দেখুন, অপশন বেছে নিন, বিকাশ বা নগদে পেমেন্ট করুন।',ic:['shirt','box','spark']},
  shoes:{hue:210,h:'প্রতিটি পদক্ষেপে আরাম।',p:'জুতার সংগ্রহ দেখুন, অপশন বেছে অর্ডার দিন, বিকাশ বা নগদে পেমেন্ট করুন।',ic:['shoe','box','spark']},
  food:{hue:95,h:'পছন্দের খাবার, এক ক্লিকে অর্ডার।',p:'খাবারের তালিকা দেখুন, অর্ডার দিন, বিকাশ বা নগদে পেমেন্ট করুন।',ic:['apple','basket','box']},
  grocery:{hue:45,h:'ঘরের বাজার, এক জায়গায়।',p:'প্রতিদিনের গ্রোসারি পণ্য দেখুন আর সহজে অর্ডার করুন।',ic:['basket','apple','box']}
 };
-/* cover stage: the category's real products (photo if uploaded, otherwise the product's own icon), floating. */
-const heroProducts=k=>S.items.filter(p=>p.active!==false&&secOf(p)===k).sort((x,y)=>(y.feat?1:0)-(x.feat?1:0)).slice(0,3);
-const heroSig=k=>heroProducts(k).map(p=>[p.id,p.image||'',p.title,minPrice(p),p.feat?1:0,LANG].join('~')).join('|');
-function stageFor(x,i){
-  const k=x[0],H=HERO[k]||{},ics=H.ic||['box','spark','basket'],nm=T(x[1]);
-  const arr=heroProducts(k);
-  if(!arr.length)return gstage(ics[0],nm,T('শীঘ্রই আসছে'),ics[1],ics[2]);
-  return arr.map((p,j)=>{const c=['g-a','g-b','g-c'][j],art=/^https:\/\//.test(p.image||'')?`<span class="pimg ph"><img src="${esc(p.image)}" alt="" loading="lazy"></span>`:`<span class="pimg">${ic(p.art,'w')}</span>`;
-    return `<div class="gc ${c}" style="--d:${[1.2,.6,1.9][j]}"><button type="button" class="in pc" data-act="open" data-id="${esc(p.id)}" aria-label="${esc(tp(p,'title'))}">${art}<b>${esc(tp(p,'title'))}</b><span>${money(minPrice(p))}</span></button></div>`}).join('');
-}
-function paintHeroStages(){
-  $$('#hero .stage').forEach(st=>{const k=st.dataset.k,x=SECS.find(y=>y[0]===k);if(!x)return;const sig=heroSig(k);if(st.dataset.sig===sig)return;st.dataset.sig=sig;st.innerHTML=stageFor(x)});
-}
 const slides = ()=>SECS.map((x,i)=>{
   const k=x[0],H=HERO[k]||{},nm=T(x[1]);
-  return {k,hue:H.hue!=null?H.hue:(i*47+18)%360,eye:nm,h:T(H.h||nm),p:T(H.p||'এই ক্যাটাগরির সব পণ্য দেখুন আর সহজে অর্ডার করুন।'),
-    a:[H.a?T(H.a):T('{n} দেখুন',{n:nm}),k],b:[T('সব পণ্য'),'all'],stage:stageFor(x,i),sig:heroSig(k)};
+  const ics=H.ic||['box','spark','basket'];
+  return {hue:H.hue!=null?H.hue:(i*47+18)%360,eye:nm,h:T(H.h||nm),p:T(H.p||'এই ক্যাটাগরির সব পণ্য দেখুন আর সহজে অর্ডার করুন।'),
+    a:[H.a?T(H.a):T('{n} দেখুন',{n:nm}),k],b:[T('সব পণ্য'),'all'],
+    stage:H.stage?H.stage():gstage(ics[0],nm,'Modex',ics[1],ics[2])};
 });
 function heroHTML(){
   const SL=slides();
-  const sl=SL.map((s,i)=>`<div class="slide${i===0?' active':''}" style="--h:${s.hue}" role="group" aria-roledescription="${T('স্লাইড')}" aria-label="${i+1}/${SL.length}"><div class="bg"></div><div class="wrap hero-in"><div class="copy"><span class="eyebrow">${esc(s.eye)}</span><h1 class="h1">${s.h.split(' ').map((w,j)=>`<span style="--i:${j}">${esc(w)}</span>`).join(' ')}</h1><p>${esc(s.p)}</p><div class="cta"><a href="#" class="btn light" data-act="goto" data-to="shop" data-kind="${s.a[1]}">${esc(s.a[0])}${ui('arrow',18)}</a><a href="#" class="btn glass" data-act="goto" data-to="shop" data-kind="${s.b[1]}">${esc(s.b[0])}</a></div></div><div class="stage" data-k="${esc(s.k)}" data-sig="${esc(s.sig)}">${s.stage}</div></div></div>`).join('');
+  const sl=SL.map((s,i)=>`<div class="slide${i===0?' active':''}" style="--h:${s.hue}" role="group" aria-roledescription="${T('স্লাইড')}" aria-label="${i+1}/${SL.length}"><div class="bg"></div><div class="wrap hero-in"><div class="copy"><span class="eyebrow">${esc(s.eye)}</span><h1 class="h1">${s.h.split(' ').map((w,j)=>`<span style="--i:${j}">${esc(w)}</span>`).join(' ')}</h1><p>${esc(s.p)}</p><div class="cta"><a href="#" class="btn light" data-act="goto" data-to="shop" data-kind="${s.a[1]}">${esc(s.a[0])}${ui('arrow',18)}</a><a href="#" class="btn glass" data-act="goto" data-to="shop" data-kind="${s.b[1]}">${esc(s.b[0])}</a></div></div><div class="stage" aria-hidden="true">${s.stage}</div></div></div>`).join('');
   return `<section class="hero" id="hero" aria-roledescription="${T('ক্যারোসেল')}" aria-label="${T('ফিচার্ড')}"><div class="track">${sl}</div><div class="pills"><div class="wrap">${SL.map((s,i)=>`<button class="pill${i===0?' on':''}" data-act="slide" data-i="${i}" data-k="${esc(SECS[i]?SECS[i][0]:'all')}" aria-label="${T('স্লাইড {n}',{n:i+1})}"></button>`).join('')}</div></div></section>`;
 }
 function trustHTML(){
@@ -829,7 +810,6 @@ function card(p,i=0){
 }
 function renderGrid(){
   const g=$('#grid');if(!g)return;
-  if(!S.loading)paintHeroStages();
   if(S.loading){g.innerHTML=Array.from({length:8},()=>'<div class="card sk"></div>').join('');return}
   const a=visibleItems();
   g.innerHTML=a.length?a.map(card).join(''):`<div class="empty">${S.f.kind!=='all'&&!S.f.q.trim()?T('এই ক্যাটাগরিতে শীঘ্রই পণ্য আসছে।'):T('কিছু পাওয়া যায়নি। অন্য শব্দে খুঁজে দেখুন।')}</div>`;
